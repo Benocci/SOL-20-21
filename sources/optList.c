@@ -1,5 +1,5 @@
 /*******************************************************************************************
-OPTLIST.h: implementazione della struttura dati che viene utilizzata per gestire le "opzioni"
+OPTLIST.c: implementazione della struttura dati che viene utilizzata per gestire le "opzioni"
            date ad un client. (LinkedList come coda -> push&pop)
 AUTORE: FRANCESCO BENOCCI
 
