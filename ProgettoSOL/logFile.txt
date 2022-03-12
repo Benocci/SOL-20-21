@@ -1,0 +1,169 @@
+FILE DI LOG:
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file10.txt.
+	Flags: O_CREATE.
+
+Operazione di tipo 'WRITE_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file10.txt.
+	Numero di byte scritti: 734.
+
+Operazione di tipo 'CLOSE_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file10.txt.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file11.txt.
+	Flags: O_CREATE.
+
+Operazione di tipo 'WRITE_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file11.txt.
+	Numero di byte scritti: 633.
+
+Operazione di tipo 'CLOSE_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file11.txt.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file12.txt.
+	Flags: O_CREATE.
+
+Operazione di tipo 'WRITE_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file12.txt.
+	Numero di byte scritti: 29999.
+
+Operazione di tipo 'CLOSE_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file12.txt.
+
+Operazione di tipo 'CLOSE_CONNECTION' del client 7.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+	Flags: O_CREATE.
+
+Operazione di tipo 'WRITE_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+	Numero di byte scritti: 213.
+
+Operazione di tipo 'CLOSE_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/file3.txt.
+	Flags: O_CREATE.
+
+Operazione di tipo 'WRITE_FILE' del client 7:
+	Nome file: ./fileClient/file3.txt.
+	Numero di byte scritti: 7484.
+
+Operazione di tipo 'CLOSE_FILE' del client 7:
+	Nome file: ./fileClient/file3.txt.
+
+Operazione di tipo 'CLOSE_CONNECTION' del client 7.
+
+Operazione di tipo 'READ_N_FILE' del client 7:
+
+File letto con operazione di tipo 'READ_N_FILE':
+	Nome file: .
+	Numero di byte letti: -1.
+
+File letto con operazione di tipo 'READ_N_FILE':
+	Nome file: .
+	Numero di byte letti: -1.
+
+File letto con operazione di tipo 'READ_N_FILE':
+	Nome file: .
+	Numero di byte letti: -1.
+
+File letto con operazione di tipo 'READ_N_FILE':
+	Nome file: .
+	Numero di byte letti: -1.
+
+File letto con operazione di tipo 'READ_N_FILE':
+	Nome file: .
+	Numero di byte letti: -1.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+	Flags: O_CREATE.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+	Flags: O_NOFLAG.
+
+Operazione di tipo 'APPEND_TO_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+	Numero di byte scritti: 213.
+
+Operazione di tipo 'CLOSE_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+
+Operazione di tipo 'CLOSE_CONNECTION' del client 7.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/file3.txt.
+	Flags: O_LOCK.
+
+Operazione di tipo 'REMOVE_FILE' del client 7:
+	Nome file: ./fileClient/file3.txt.
+
+Operazione di tipo 'CLOSE_CONNECTION' del client 7.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file11.txt.
+	Flags: O_NOFLAG.
+
+Operazione di tipo 'READ_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file11.txt.
+	Numero di byte letti: 633.
+
+Operazione di tipo 'CLOSE_FILE' del client 7:
+	Nome file: ./fileClient/testfile2/file11.txt.
+
+Operazione di tipo 'CLOSE_CONNECTION' del client 7.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+	Flags: O_NOFLAG.
+
+Operazione di tipo 'LOCK_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+
+Operazione di tipo 'CLOSE_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+	Flags: O_NOFLAG.
+
+Operazione di tipo 'READ_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+	Numero di byte letti: 426.
+
+Operazione di tipo 'CLOSE_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+
+Operazione di tipo 'OPEN_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+	Flags: O_NOFLAG.
+
+Operazione di tipo 'UNLOCK_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+
+Operazione di tipo 'CLOSE_FILE' del client 7:
+	Nome file: ./fileClient/file1.txt.
+
+Operazione di tipo 'CLOSE_CONNECTION' del client 7.
+
+
+STATISTICHE GENERALI DEL SERVER:
+Numero connessioni massime: 6
+Numero file creati: 5
+Numero file aperti: 16
+Numero file eliminati: 1
+Numero file chiusi: 16
+Numero file bloccati: 1
+Numero file letti: 7
+Numero file scritti: 6
+Numero massimo di file raggiunti: 5
+Dimensione massima di Mbytes raggiunta: 0.039276
+Stampo il numero di richieste per ogni worker:
+	Worker numero 0: 40 richieste servite.

@@ -1,0 +1,6 @@
+c=128000000
+f=10000
+w=1
+s=mysocket.sk
+p=50
+l=logFile.txt
