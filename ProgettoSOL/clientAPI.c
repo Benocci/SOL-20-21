@@ -51,97 +51,97 @@ int responseCheck(char response_code[RESPONSE_CODE_LENGTH]){
 
     //codice di risposta con errori:
     if(strcmp(response_code, "mcr") == 0){
-        fprintf(stderr, "ERRORE MCR: max connection reached.\n");
+        fprintf(stderr, "Operazione non possibile MCR: max connection reached.\n");
         errno = EUSERS;
         return -1;
     }
 
     if(strcmp(response_code, "ne") == 0){
-        fprintf(stderr, "ERRORE NE: file not exist.\n");
+        fprintf(stderr, "Operazione non possibile NE: file not exist.\n");
         errno = ENOENT;
         return -1;
     }
 
     if(strcmp(response_code, "nw") == 0){
-        fprintf(stderr, "ERRORE NW: file not written.\n");
+        fprintf(stderr, "Operazione non possibile NW: file not written.\n");
         errno = ENOENT;
         return -1;
     }
 
     if(strcmp(response_code, "es") == 0){
-        fprintf(stderr, "ERRORE ES: empty server.\n");
+        fprintf(stderr, "Operazione non possibile ES: empty server.\n");
         errno = ENOENT;
         return -1;
     }
 
     if(strcmp(response_code, "no") == 0){
-        fprintf(stderr, "ERRORE NE: file not open.\n");
+        fprintf(stderr, "Operazione non possibile NE: file not open.\n");
         errno = ENOENT;
         return -1;
     }
 
     if(strcmp(response_code, "tb") == 0){
-        fprintf(stderr, "ERRORE TB: file too big.\n");
+        fprintf(stderr, "Operazione non possibile TB: file too big.\n");
         errno = ENOENT;
         return -1;
     }
 
     if(strcmp(response_code, "ae") == 0){
-        fprintf(stderr, "ERRORE AE: file already exist.\n");
+        fprintf(stderr, "Operazione non possibile AE: file already exist.\n");
         errno = EEXIST;
         return -1;
     }
 
     if(strcmp(response_code, "ao") == 0){
-        fprintf(stderr, "ERRORE AO: file already open.\n");
+        fprintf(stderr, "Operazione non possibile AO: file already open.\n");
         errno = EEXIST;
         return -1;
     }
 
     if(strcmp(response_code, "fe") == 0){
-        fprintf(stderr, "ERRORE FE: flag error.\n");
+        fprintf(stderr, "Operazione non possibile FE: flag error.\n");
         errno = EINVAL;
         return -1;
     }
 
     if(strcmp(response_code, "l") == 0){
-        fprintf(stderr, "ERRORE L: file locked.\n");
+        fprintf(stderr, "Operazione non possibile L: file locked.\n");
         errno = EACCES;
         return -1;
     }
 
     if(strcmp(response_code, "aw") == 0){
-        fprintf(stderr, "ERRORE AW: file already writed.\n");
+        fprintf(stderr, "Operazione non possibile AW: file already writed.\n");
         errno = EEXIST;
         return -1;
     }
 
     if(strcmp(response_code, "ac") == 0){
-        fprintf(stderr, "ERRORE AC: file already closed.\n");
+        fprintf(stderr, "Operazione non possibile AC: file already closed.\n");
         errno = EEXIST;
         return -1;
     }
 
     if(strcmp(response_code, "au") == 0){
-        fprintf(stderr, "ERRORE AU: file already unlocked.\n");
+        fprintf(stderr, "Operazione non possibile AU: file already unlocked.\n");
         errno = EEXIST;
         return -1;
     }
 
     if(strcmp(response_code, "odo") == 0){
-        fprintf(stderr, "ERRORE ODO: file open by different owner.\n");
+        fprintf(stderr, "Operazione non possibile ODO: file open by different owner.\n");
         errno = EACCES;
         return -1;
     }
 
     if(strcmp(response_code, "ldo") == 0){
-        fprintf(stderr, "ERRORE LDO: file lock by different owner.\n");
+        fprintf(stderr, "Operazione non possibile LDO: file lock by different owner.\n");
         errno = EACCES;
         return -1;
     }
 
     if(strcmp(response_code, "dfu") == 0){
-        fprintf(stderr, "ERRORE DFU: delete file unlocked.\n");
+        fprintf(stderr, "Operazione non possibile DFU: delete file unlocked.\n");
         errno = ENOPROTOOPT;
         return -1;
     }
