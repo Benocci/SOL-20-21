@@ -195,7 +195,7 @@ int openConnection(const char *sockname, int msec, const struct timespec abstime
         currTime.tv_sec = time(0);
         
         if(abstime.tv_sec >= (startTime.tv_sec-currTime.tv_sec)){//se è passato troppo tempo ritorno -1 settando errno (connessione fallita)
-            // fprintf(stderr,"ERRORE: la connessione al server ha richiesto troppo tempo.\n");
+            fprintf(stderr,"ERRORE: la connessione al server ha richiesto troppo tempo.\n");
             errno = EAGAIN;
             return -1;
         }
@@ -415,7 +415,7 @@ int readNFiles(int N, const char *dirname){
     //stampo (se abilitato) il tipo di operazione, i suoi argomenti e il codice di risposta del server
     printStdOut(to_send->opt_code, NULL, -1, to_receive->response_code, -1);
     if(print_stdout){
-        printf("Numero file letti: %d", i);
+        printf("Numero file letti: %d\n", i);
     }
 
     //se il codice di risposta è corretto ritorno 0, -1 altrimenti

@@ -35,7 +35,7 @@ char dirSave[MAX_LENGTH];
 int writeFileOnServer(char *file_path, struct stat info){
     if(openFile(file_path, O_CREATE) == 0) {   // se apro il file con O_CREATE correttamento (creo il file) allora
         if(writeFile(file_path, dirExp) != 0) {  // scrivo al suo interno il contenuto di 'file_path'
-            fprintf(stderr, "ERRORE: writeFile di %s\n", file_path);
+            fprintf(stderr, "WriteFile di %s non conclusa correttamente\n", file_path);
         }
     }
     else if(openFile(file_path, O_NOFLAG) == 0){ // altrimenti se il file è già presente appendo al suo interno il contenuto di 'file_path'
@@ -45,7 +45,7 @@ int writeFileOnServer(char *file_path, struct stat info){
         void *data = smalloc(sizeof(char)*info.st_size);
         if(fread(data, 1, info.st_size, filePointer) == info.st_size){
             if(appendToFile(file_path, data, info.st_size, dirExp) != 0){
-                fprintf(stderr, "ERRORE: appendFile di %s\n", file_path);
+                fprintf(stderr, "AppendFile di %s non conclusa correttamente\n", file_path);
             }
         }
         fclose(filePointer);
@@ -199,7 +199,6 @@ int processOperation(optList *operation_to_do){
                 if(stat(file_path, &info) == 0){// apro le statistiche del file
                     if(S_ISDIR(info.st_mode) == 0){// se il file è leggibile chiamo la funzione per scriverlo nel server
                         if(writeFileOnServer(file_path, info) == -1){
-                            fprintf(stderr, "ERRORE writeFileOnServer\n");
                             return -1;
                         }
                     }
@@ -210,7 +209,6 @@ int processOperation(optList *operation_to_do){
                     }
                 }
                 else{// non è possibile aprire le statistiche del file
-                    fprintf(stderr, "Il file non esiste\n");  
                     errno = ENOENT;
                     return -1;
                 }
@@ -238,7 +236,7 @@ int processOperation(optList *operation_to_do){
 
             while (file_path != NULL){//finchè leggo file ciclo
                 if(openFile(file_path, O_NOFLAG) != 0) { // apro il file senza flag
-                    fprintf(stderr, "ERRORE: openFile\n");
+                    fprintf(stderr, "OpenFile di %s non conclusa correttamente.\n", file_path);
                     return -1;
                 }
 
@@ -271,12 +269,12 @@ int processOperation(optList *operation_to_do){
                     }
                 }
                 else{
-                    fprintf(stderr, "ERRORE: readFile\n");
+                    fprintf(stderr, "ReadFile di %s non conclusa correttamente.\n", file_path);
                     return -1;
                 }
 
                 if(closeFile(file_path) != 0){ // chiudo il file
-                    fprintf(stderr, "ERRORE: closeFile\n");
+                    fprintf(stderr, "CloseFile di %s non conclusa correttamente.\n", file_path);
                     return -1;
                 }
                 
@@ -304,13 +302,13 @@ int processOperation(optList *operation_to_do){
 
             if(opendir(dirSave) == NULL){// se non è stata settata la directory dove salvare i file passo NULL come argomento
                 if(readNFiles(num, NULL) != 0) {
-                    fprintf(stderr, "ERRORE: readNFile\n");
+                    fprintf(stderr, "ReadNFile non conclusa correttamente.\n");
                     return -1;
                 }
             }
             else{ // altrimenti passo la 'dirSave'
                 if(readNFiles(num, dirSave) != 0) {
-                    fprintf(stderr, "ERRORE: readNFile\n");
+                    fprintf(stderr, "ReadNFile non conclusa correttamente.\n");
                     return -1;
                 }
             }
@@ -331,21 +329,21 @@ int processOperation(optList *operation_to_do){
             file_path = strtok(operation_to_do->head->args, ",");
             while(file_path != NULL){//ciclo finchè leggo file
                 if(openFile(file_path, O_NOFLAG) != 0) { // apro il file senza flag (avrei potuto anche aprirlo direttamente con la flag O_LOCK)
-                    fprintf(stderr, "ERRORE: openFile\n");
+                    fprintf(stderr, "OpenFile di %s non conclusa correttamente.\n", file_path);
                     return -1;
                 }
                 
                 if(lockFile(file_path) != 0){ // metto il file in lock
-                    fprintf(stderr, "ERRORE: lockFile\n");
+                    fprintf(stderr, "LockFile di %s non conclusa correttamente.\n", file_path);
                     if(closeFile(file_path) != 0){ // chiudo il file
-                        fprintf(stderr, "ERRORE: closeFile\n");
+                        fprintf(stderr, "CloseFile di %s non conclusa correttamente.\n", file_path);
                         return -1;
                     }
                     return -1;
                 }
 
                 if(closeFile(file_path) != 0){ // chiudo il file
-                    fprintf(stderr, "ERRORE: closeFile\n");
+                    fprintf(stderr, "CloseFile di %s non conclusa correttamente.\n", file_path);
                     return -1;
                 }
                 
@@ -368,21 +366,21 @@ int processOperation(optList *operation_to_do){
             file_path = strtok(operation_to_do->head->args, ",");
             while(file_path != NULL){//ciclo finchè ho file
                 if(openFile(file_path, O_NOFLAG) != 0) { // apro il file
-                    fprintf(stderr, "ERRORE: openFile\n");
+                    fprintf(stderr, "OpenFile di %s non conclusa correttamente.\n", file_path);
                     return -1;
                 }
 
                 if(unlockFile(file_path) != 0){ // resetto la lock
-                    fprintf(stderr, "ERRORE: unlockFile\n");
+                    fprintf(stderr, "UnlockFile di %s non conclusa correttamente.\n", file_path);
                     if(closeFile(file_path) != 0){ // chiudo il file
-                        fprintf(stderr, "ERRORE: closeFile\n");
+                        fprintf(stderr, "CloseFile di %s non conclusa correttamente.\n", file_path);
                         return -1;
                     }
                     return -1;
                 }
 
                 if(closeFile(file_path) != 0){ // chiudo il file
-                    fprintf(stderr, "ERRORE: closeFile\n");
+                    fprintf(stderr, "CloseFile di %s non conclusa correttamente.\n", file_path);
                     return -1;
                 }
 
@@ -404,17 +402,17 @@ int processOperation(optList *operation_to_do){
             file_path = strtok(operation_to_do->head->args, ",");
             while(file_path != NULL){//ciclo finchè ho file
                 if(openFile(file_path, O_LOCK) != 0){ // apro il file in modalità bloccante
-                    fprintf(stderr, "ERRORE: openFile\n");
+                    fprintf(stderr, "OpenFile di %s non conclusa correttamente.\n", file_path);
                     return -1;
                 }
                 
                 if(removeFile(file_path) != 0){ //rimuovo il file dal server
-                    fprintf(stderr, "ERRORE: removeFile\n");
+                    fprintf(stderr, "RemoveFile di %s non conclusa correttamente.\n", file_path);
                     return -1;
                 }
                 
                 if(print_stdout){
-                    printf("File %s rimosso dal server.\n", file_path);    
+                    printf("File %s rimosso dal server.\n", file_path);
                 }
                 
                 file_path = strtok(NULL, ",");
@@ -542,7 +540,7 @@ int main(int argc, char *argv[]){
         
         fd_skt = openConnection(skt_path, 1000, abstime);
         if(fd_skt == -1){
-            // fprintf(stderr, "ERRORE: openConnection\n");
+            fprintf(stderr, "OpenConnection non conclusa correttamente.\n");
             return -1;
         }
     }
@@ -567,7 +565,7 @@ int main(int argc, char *argv[]){
         nanosleep(&t, NULL);//attesa (lag)
 
         if(processOperation(operation_to_do) != 0){//processo l'operazione, in caso di errore stampo una descrizione del'errore e il suo codice(errno).
-            fprintf(stderr, "Impossibile completare l'operazione correttamente, ERRORE: %s(Codice errno=%d).\n", strerror(errno), errno);
+            fprintf(stderr, "Operazione non è stata completata correttamente, errore %s(Codice errno=%d).\n", strerror(errno), errno);
         }
 
         free(popOpt(operation_to_do));//elimino l'operazione eseguita

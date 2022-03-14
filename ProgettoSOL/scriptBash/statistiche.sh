@@ -74,6 +74,10 @@ grep "Worker numero" $1
 # max connection:
 grep "Numero connessioni massime" $1
 
+# richieste svolte correttamente:
+echo -e -n "Numero di risposte positive dal server: "
+grep "svolta correttamente" $1 | wc -l 
+
 # errori rilevati:
 echo -e -n "Numero di risposte negative dal server: "
 grep "ERROR" $1 | wc -l
