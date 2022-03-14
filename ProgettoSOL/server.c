@@ -183,7 +183,7 @@ void *worker(void *args){
                     //controlli sul file che in caso di errore stampano lato client e impostano codice di uscita del relativo errore:
                     if(old_file == NULL){
                         UNLOCK("mtx_storage_access",mtx_storage_access);
-                        fprintf(stderr, "ERRORE: apertura di un file inesistente\n");
+                        fprintf(stderr, "Operazione non possibile: apertura di un file inesistente\n");
                         printErrorOnLogFile("file inesistente.", socket_con);
                         setMsg(to_send, -1, 0, "ne","", NULL, 0);
                         break;
@@ -191,7 +191,7 @@ void *worker(void *args){
 
                     if(old_file->openBy != -1){
                         UNLOCK("mtx_storage_access",mtx_storage_access);
-                        fprintf(stderr, "ERRORE: file già aperto\n");
+                        fprintf(stderr, "Operazione non possibile: file già aperto\n");
                         printErrorOnLogFile("file già aperto.", socket_con);
                         setMsg(to_send, -1, 0, "ao","", NULL, 0);
                         break;
@@ -199,7 +199,7 @@ void *worker(void *args){
                     
                     if(old_file->lockedBy != to_receive->pid && old_file->lockedBy != 0){
                         UNLOCK("mtx_storage_access",mtx_storage_access);
-                        fprintf(stderr, "ERRORE: apertura di un file bloccato da parte di un utente non abilitato\n");
+                        fprintf(stderr, "Operazione non possibile: apertura di un file bloccato da parte di un utente non abilitato\n");
                         printErrorOnLogFile("file non accessibile.", socket_con);
                         setMsg(to_send, -1, 0, "ao","", NULL, 0);
                         break;
@@ -277,7 +277,7 @@ void *worker(void *args){
             case READ_FILE: {
                 //controlli sul file che in caso di errore stampano lato client e impostano codice di uscita del relativo errore:
                 if(old_file == NULL){    
-                    fprintf(stderr, "ERRORE: apertura di un file inesistente\n");
+                    fprintf(stderr, "Operazione non possibile: apertura di un file inesistente\n");
                     printErrorOnLogFile("file inesistente.", socket_con);
                     setMsg(to_send, -1, 0, "ne","", NULL, 0);
                     break;
@@ -285,7 +285,7 @@ void *worker(void *args){
 
                 if(old_file->openBy == -1){
                     UNLOCK("mtx_storage_access", mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file chiuso\n");
+                    fprintf(stderr, "Operazione non possibile: file chiuso\n");
                     printErrorOnLogFile("file chiuso.", socket_con);
                     setMsg(to_send, -1, 0, "no","", NULL, 0);
                     break;
@@ -428,7 +428,7 @@ void *worker(void *args){
                 //controlli sul file che in caso di errore stampano lato client e impostano codice di uscita del relativo errore:
                 if(old_file == NULL){
                     UNLOCK("mtx_storage_access", mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file inesistente.\n");
+                    fprintf(stderr, "Operazione non possibile: file inesistente.\n");
                     printErrorOnLogFile("file inesistente.", socket_con);
                     setMsg(to_send, -1, 0, "ne","", NULL, 0);
                     break;
@@ -436,7 +436,7 @@ void *worker(void *args){
 
                 if(old_file->openBy == -1){
                     UNLOCK("mtx_storage_access", mtx_storage_access);
-                    fprintf(stderr, "ERRORE: file chiuso\n");
+                    fprintf(stderr, "Operazione non possibile: file chiuso\n");
                     printErrorOnLogFile("file chiuso.", socket_con);
                     setMsg(to_send, -1, 0, "no","", NULL, 0);
                     break;
@@ -444,7 +444,7 @@ void *worker(void *args){
 
                 if(old_file->data_length != 0){
                     UNLOCK("mtx_storage_access", mtx_storage_access);
-                    fprintf(stderr, "ERRORE: scrittura su file non vuoto\n");
+                    fprintf(stderr, "Operazione non possibile: scrittura su file non vuoto\n");
                     printErrorOnLogFile("file già scritto.", socket_con);
                     setMsg(to_send, -1, 0, "aw","", NULL, 0);
                     break;
@@ -452,7 +452,7 @@ void *worker(void *args){
 
                 if(old_file->lockedBy != to_receive->pid && old_file->lockedBy != 0){
                     UNLOCK("mtx_storage_access", mtx_storage_access);
-                    fprintf(stderr, "ERRORE: scrittura su un file bloccato da parte di un utente non abilitato\n");
+                    fprintf(stderr, "Operazione non possibile: scrittura su un file bloccato da parte di un utente non abilitato\n");
                     printErrorOnLogFile("file inaccessibile.", socket_con);
                     setMsg(to_send, -1, 0, "l","", NULL, 0);
                     break;
@@ -460,7 +460,7 @@ void *worker(void *args){
 
                 if(to_receive->data_length > newConfigFile->capacity){
                     UNLOCK("mtx_storage_access", mtx_storage_access);
-                    fprintf(stderr, "ERRORE: file troppo grande per essere salvato.\n");
+                    fprintf(stderr, "Operazione non possibile: file troppo grande per essere salvato.\n");
                     printErrorOnLogFile("file troppo grande.", socket_con);
                     setMsg(to_send, -1, 0, "tb","", NULL, 0);
                     break;
@@ -602,7 +602,7 @@ void *worker(void *args){
                 //controlli sul file che in caso di errore stampano lato client e impostano codice di uscita del relativo errore:
                 if(old_file == NULL){
                     UNLOCK("mtx_storage_access",mtx_storage_access); 
-                    fprintf(stderr, "ERRORE: file inesistente\n");
+                    fprintf(stderr, "Operazione non possibile: file inesistente\n");
                     printErrorOnLogFile("file inesistente.", socket_con);
                     setMsg(to_send, -1, 0, "ne","", NULL, 0);
                     break;
@@ -610,7 +610,7 @@ void *worker(void *args){
 
                 if(old_file->openBy == -1){
                     UNLOCK("mtx_storage_access",mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file chiuso\n");
+                    fprintf(stderr, "Operazione non possibile: file chiuso\n");
                     printErrorOnLogFile("file chiuso.", socket_con);
                     setMsg(to_send, -1, 0, "no","", NULL, 0);
                     break;
@@ -618,7 +618,7 @@ void *worker(void *args){
 
                 if(old_file->lockedBy != to_receive->pid && old_file->lockedBy != 0){
                     UNLOCK("mtx_storage_access",mtx_storage_access);
-                    fprintf(stderr, "ERRORE: scrittura su un file bloccato da parte di un utente non abilitato\n");
+                    fprintf(stderr, "Operazione non possibile: scrittura su un file bloccato da parte di un utente non abilitato\n");
                     printErrorOnLogFile("file inaccessibile.", socket_con);
                     setMsg(to_send, -1, 0, "l","", NULL, 0);
                     break;
@@ -626,7 +626,7 @@ void *worker(void *args){
 
                 if(to_receive->data_length+old_file->data_length > newConfigFile->capacity){
                     UNLOCK("mtx_storage_access",mtx_storage_access);
-                    fprintf(stderr, "ERRORE: file troppo grande per essere salvato.\n");
+                    fprintf(stderr, "Operazione non possibile: file troppo grande per essere salvato.\n");
                     printErrorOnLogFile("file troppo grande.", socket_con);
                     setMsg(to_send, -1, 0, "tb","", NULL, 0);
                     break;
@@ -736,7 +736,7 @@ void *worker(void *args){
                 //controlli sul file che in caso di errore stampano lato client e impostano codice di uscita del relativo errore:
                 if(old_file == NULL){
                     UNLOCK("mtx_storage_access", mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file inesistente\n");
+                    fprintf(stderr, "Operazione non possibile: file inesistente\n");
                     printErrorOnLogFile("file inesistente.", socket_con);
                     setMsg(to_send, -1, 0, "ne","", NULL, 0);
                     break;
@@ -744,7 +744,7 @@ void *worker(void *args){
 
                 if(old_file->openBy == -1){
                     UNLOCK("mtx_storage_access", mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file chiuso\n");
+                    fprintf(stderr, "Operazione non possibile: file chiuso\n");
                     printErrorOnLogFile("file chiuso.", socket_con);
                     setMsg(to_send, -1, 0, "no","", NULL, 0);
                     break;
@@ -778,7 +778,7 @@ void *worker(void *args){
                 //controlli sul file che in caso di errore stampano lato client e impostano codice di uscita del relativo errore:
                 if(old_file == NULL){
                     UNLOCK("mtx_storage_access",mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file inesistente\n");
+                    fprintf(stderr, "Operazione non possibile: file inesistente\n");
                     printErrorOnLogFile("file inesistente.", socket_con);
                     setMsg(to_send, -1, 0, "ne","", NULL, 0);
                     break;
@@ -786,7 +786,7 @@ void *worker(void *args){
 
                 if(old_file->openBy == -1){
                     UNLOCK("mtx_storage_access",mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file chiuso\n");
+                    fprintf(stderr, "Operazione non possibile: file chiuso\n");
                     printErrorOnLogFile("file chiuso.", socket_con);
                     setMsg(to_send, -1, 0, "no","", NULL, 0);
                     break;
@@ -794,7 +794,7 @@ void *worker(void *args){
                 
                 if(old_file->lockedBy == 0){
                     UNLOCK("mtx_storage_access",mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file non bloccato\n");
+                    fprintf(stderr, "Operazione non possibile: file non bloccato\n");
                     printErrorOnLogFile("file non bloccato.", socket_con);
                     setMsg(to_send, -1, 0, "au","", NULL, 0);
                     break;
@@ -802,7 +802,7 @@ void *worker(void *args){
 
                 if(old_file->lockedBy != to_receive->pid && old_file->lockedBy != 0){
                     UNLOCK("mtx_storage_access",mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file impossibile sbloccare un file se non si è gli owner\n");
+                    fprintf(stderr, "Operazione non possibile: file impossibile sbloccare un file se non si è gli owner\n");
                     printErrorOnLogFile("file inaccessibile.", socket_con);
                     setMsg(to_send, -1, 0, "ldo","", NULL, 0);
                     break;
@@ -823,7 +823,7 @@ void *worker(void *args){
                 //controlli sul file che in caso di errore stampano lato client e impostano codice di uscita del relativo errore:
                 if(old_file == NULL){
                     UNLOCK("mtx_storage_access", mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file inesistente\n");
+                    fprintf(stderr, "Operazione non possibile: file inesistente\n");
                     printErrorOnLogFile("file inesistente.", socket_con);
                     setMsg(to_send, -1, 0, "ne","", NULL, 0);
                     break;
@@ -831,7 +831,7 @@ void *worker(void *args){
 
                 if(old_file->openBy == -1){
                     UNLOCK("mtx_storage_access", mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file già chiuso.\n");
+                    fprintf(stderr, "Operazione non possibile: file già chiuso.\n");
                     printErrorOnLogFile("file già chiuso.", socket_con);
                     setMsg(to_send, -1, 0, "ac","", NULL, 0);
                     break;
@@ -839,7 +839,7 @@ void *worker(void *args){
 
                 if(old_file->openBy != to_receive->pid){
                     UNLOCK("mtx_storage_access", mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file aperto da un'altra persona\n");
+                    fprintf(stderr, "Operazione non possibile: file aperto da un'altra persona\n");
                     printErrorOnLogFile("file già aperto.", socket_con);
                     setMsg(to_send, -1, 0, "odo","", NULL, 0);
                     break;
@@ -862,14 +862,14 @@ void *worker(void *args){
                 if(old_file == NULL || old_file->pathname == NULL){
                     UNLOCK("mtx_storage_access", mtx_storage_access);
                     printErrorOnLogFile("file inesistente.", socket_con);
-                    fprintf(stderr, "ERRORE: file inesistente\n");
+                    fprintf(stderr, "Operazione non possibile: file inesistente\n");
                     setMsg(to_send, -1, 0, "ne","", NULL, 0);
                     break;
                 }
 
                 if(old_file->lockedBy == 0){
                     UNLOCK("mtx_storage_access", mtx_storage_access);
-                    fprintf(stderr, "ERRORE: rimozione file non in lock\n");
+                    fprintf(stderr, "Operazione non possibile: rimozione file non in lock\n");
                     printErrorOnLogFile("file non bloccato.", socket_con);
                     setMsg(to_send, -1, 0, "dfu","", NULL, 0);
                     break;
@@ -877,7 +877,7 @@ void *worker(void *args){
 
                 if(old_file->lockedBy != to_receive->pid){
                     UNLOCK("mtx_storage_access", mtx_storage_access);    
-                    fprintf(stderr, "ERRORE: file in lock da parte di un altro processo\n");
+                    fprintf(stderr, "Operazione non possibile: file in lock da parte di un altro processo\n");
                     printErrorOnLogFile("file già in blocco.", socket_con);
                     setMsg(to_send, -1, 0, "ldo","", NULL, 0);
                     break;
