@@ -1166,8 +1166,3 @@ int main(int argc, char *argv[]){
 
     return 0;
 }
-
-/* TODO LIST:
- *  - ricontrollo del test3 su terminazioni anomale -> problema sulle lock nella read_N_file
- *  - riscrivere la relazione
- */

@@ -1,3 +1,6 @@
+#define _POSIX_C_SOURCE 200112L
+#define _DEFAULT_SOURCE
+
 #include <stdio.h>
 #include <string.h>
 #include <stdlib.h>
@@ -555,14 +558,10 @@ int main(int argc, char *argv[]){
         printf("Connessione stabilita correttamente.\n");
     }
 
-    struct timespec t;
-    t.tv_nsec = (lag_time%1000)*1000000000;
-    t.tv_sec = lag_time/1000;
-
     //inizio a comunicare con il server:
     while(operation_to_do->numElem > 0){//ciclo finchè ho operazioni da eseguire
         
-        nanosleep(&t, NULL);//attesa (lag)
+        usleep(lag_time/1000);//attesa (lag)
 
         if(processOperation(operation_to_do) != 0){//processo l'operazione, in caso di errore stampo una descrizione del'errore e il suo codice(errno).
             fprintf(stderr, "Operazione non è stata completata correttamente, errore %s(Codice errno=%d).\n", strerror(errno), errno);
