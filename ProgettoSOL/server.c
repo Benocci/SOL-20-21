@@ -40,6 +40,7 @@ QueueFile *coda_file = NULL;
 //mutex che regola l'accesso al server in maniera sincrona
 pthread_mutex_t mtx_storage_access = PTHREAD_MUTEX_INITIALIZER;
 
+//CODA TASK: coda in cui sono salvati gli fd dei client da servire:
 QueueTask *coda_task = NULL;
 
 //segnali di chiusura
@@ -93,15 +94,14 @@ void printErrorOnLogFile(char *errore, int num_client){
  * EFFETTO: funzione worker che processa una singola richiesta di un client
  */
 void *worker(void *args){
-    int comPipe = ((int*)args)[0];
-    int num_worker = ((int*)args)[1];
+    int comPipe = ((int*)args)[0];   //fd della pipe di comunicazione per la conclusione del task
+    int num_worker = ((int*)args)[1];//intero che identifica il numero del worker
     free(args);
 
     printf("Avvio worker numero %d con pipe %d\n", num_worker, comPipe);
 
-    //inizializzo il messaggio di risposta client:
+    //inizializzo i messaggi:
     Msg* to_send = smalloc(sizeof(Msg));
-
     Msg* to_receive = smalloc(sizeof(Msg));
 
     while(1){
@@ -112,9 +112,10 @@ void *worker(void *args){
             return (void *)NULL;
         }
 
-
+        //rimuovo dalla coda il fd da servire
         int socket_con = dequeueTask(coda_task);
 
+        //nel caso di un fd == -1 ricomincio il ciclo per controllare un eventuale uscita dal ciclo:
         if(socket_con == -1){
             continue;
         }
@@ -124,7 +125,6 @@ void *worker(void *args){
             fprintf(stderr, "ERRORE: recieveMsg.\n");
             return (void *)-1;
         }
-        // printf("PROVA: RIMUOVO %d sul worker %d ed eseguo OPT: %s.\n", socket_con, num_worker, convertOptCodeInChar(to_receive->opt_code));
         
         //stampo sul logfile l'operazione con i suoi argomenti
         LOCK("mtx_file_log", mtx_file_log);
@@ -140,15 +140,19 @@ void *worker(void *args){
         }
         UNLOCK("mtx_file_log", mtx_file_log);
 
+        //incremento il numero di richieste eseguite dal worker:
         currentStatus.workerRequests[num_worker]++;
 
+        //inizializzo il messaggio da inviare sulla pipe di chiusura:
         char pipeInput[RESPONSE_CODE_LENGTH];
+        //scrivo sul messaggio da inviare sulla pipe il fd del client che sto servendo:
         snprintf(pipeInput, RESPONSE_CODE_LENGTH, "%04d", socket_con);
 
         //blocco l'accesso all'hash table e estraggo
         LOCK("mtx_storage_access", mtx_storage_access);
         File* old_file = icl_hash_find(hash_table, to_receive->path);
 
+        //chiusura della connessione:
         if(to_receive->opt_code == CLOSE_CONNECTION){
             UNLOCK("mtx_storage_access",mtx_storage_access);
             //scrivo dentro to_send le info del file:
@@ -156,6 +160,7 @@ void *worker(void *args){
 
             //imposto codice di risposta per il client di operazione avvenuta con successo:
             setMsg(to_send, 0, 0, "ok", "", NULL, 0);
+            //imposto il codice che permette di chiudere la comunicazione sull'input del pipe:
             strcpy(pipeInput, "c");
 
             LOCK("mtx_file_log", mtx_file_log);
@@ -255,7 +260,7 @@ void *worker(void *args){
                         fprintf(stderr, "ERRORE: insert hash table\n");
                         return (void *)-1;
                     }
-                    //inserisco il nome del file nella coda dei pathname:
+                    //inserisco il nome del file nella coda dei file:
                     enqueue(coda_file, new_file);
                     UNLOCK("mtx_storage_access",mtx_storage_access);
 
@@ -322,6 +327,7 @@ void *worker(void *args){
                     break;
                 }
 
+                //creo la coda temporanea dove inserire i file da leggere:
                 QueueFile *file_to_send = create();
                 
                 int num_file_letti=0, bytes_letti=0;
@@ -393,12 +399,12 @@ void *worker(void *args){
                 }
                 UNLOCK("mtx_storage_access", mtx_storage_access);
 
-
+                //ciclo che svuota la coda temporanea e invia i file al client uno a uno:
                 bool loop = true;
                 do{
                     File *currentFile = dequeue(file_to_send);
 
-                    if(currentFile == NULL){
+                    if(currentFile == NULL){//se non ho più file invio il messaggio "nmf" e termino il ciclo
                         setMsg(to_send, 0, 0, "nmf","", NULL, 0);
                         loop = false;
                     }
@@ -419,6 +425,7 @@ void *worker(void *args){
                 }
                 while(loop);
 
+                //distruggo la coda temporanea
                 destroyQueue(file_to_send);
 
                 //aggiorno le statistiche del server:
@@ -488,12 +495,14 @@ void *worker(void *args){
                     return (void *)-1;
                 }
 
+                //creo la coda temporanea dove inserire i file da spedire:
                 QueueFile *file_to_send = create();
 
                 while(checkMaxNumByte(to_receive->data_length) == 1){// se devo espellere file
                     //elimino il file dal server secondo la politica FIFO:
                     File *file = dequeue(coda_file);
 
+                    //se cerco di espellere lo stesso file inserito lo reinserisco ( in coda )
                     if(strcmp(file->pathname, old_file->pathname) == 0){
                         enqueue(coda_file, file);
                         continue;
@@ -510,7 +519,6 @@ void *worker(void *args){
                     currentStatus.num_current_bytes = currentStatus.num_current_bytes - file->data_length;
                     UNLOCK("mtx_status", mtx_status);
 
-
                     LOCK("mtx_file_log", mtx_file_log);
                     fprintf(file_log, "\tServer pieno per capacità, rimpiazzo il file '%s'.\n", to_send->path);
                     fprintf(file_log, "\tNumero di byte eliminati: %d.\n", to_send->data_length);
@@ -519,6 +527,7 @@ void *worker(void *args){
                     enqueue(file_to_send, file);
                 }
 
+                //svuoto la coda temporanea contenente tutti i file da espulsi:
                 while(loop){
                     File *currentFile = dequeue(file_to_send);
 
@@ -530,7 +539,7 @@ void *worker(void *args){
                         setMsg(to_send, 0, 0, "ok", currentFile->pathname, currentFile->data, currentFile->data_length);
                     }
 
-                    // invio il messaggio dove dico se dovrò o meno espellere file
+                    // invio il messaggio dove dico se dovrò o meno continuare ad inviare altri file
                     if(sendMsg(to_send, socket_con) == -1){ 
                         fprintf(stderr, "ERRORE: sendMsg.\n");
                         return (void *)-1;
@@ -813,6 +822,7 @@ void *worker(void *args){
                     break;
                 }
 
+                //rimuovo la lock dal file
                 old_file->lockedBy = 0;
                 UNLOCK("mtx_storage_access",mtx_storage_access);
                 
@@ -936,6 +946,7 @@ void *worker(void *args){
             return (void *)-1;
         }
 
+        //invio sulla pipe il messaggio di closeConnectio 'c' oppure il fd socket_con
         if(write(comPipe, pipeInput, RESPONSE_CODE_LENGTH) == -1){
             fprintf(stderr ,"ERRORE: write pipe.");
             return (void *)-1;
@@ -1087,7 +1098,7 @@ int main(int argc, char *argv[]){
                     if(softExit){
                         close(socket_con);
                     }
-                    else{
+                    else{//se non ho softExit == 1 apro effettivamente la connessione
                         FD_SET(socket_con, &set);
 
                         if(fd_max < socket_con){
@@ -1105,10 +1116,12 @@ int main(int argc, char *argv[]){
                         fprintf(stderr ,"ERRORE: read pipe.\n");
                     }
 
+                    //se ho ricevuto sulla pipe 'c' allora termino il ciclo for (chiudo la connessione)
                     if(strcmp(pipeBuffer, "c") == 0){
                         break;
                     }
 
+                    //altrimenti se il fd ricevuto è != 0 setto nuovamente tmpset
                     if(atol(pipeBuffer) != 0){
                         FD_SET(atol(pipeBuffer), &tmpset);
                         if(atol(pipeBuffer) > fd_max){
@@ -1128,6 +1141,7 @@ int main(int argc, char *argv[]){
                         fd_max--;
                     }
                     
+                    //inserisco il fd nella coda dei task
                     enqueueTask(coda_task, i);
                 }
             }
@@ -1135,15 +1149,17 @@ int main(int argc, char *argv[]){
 
     }
 
+    //inserisco nella coda task dei messaggi che permettono di terminare i thread worker
     for(int i = 0; i < newConfigFile->numWorker; i++){
         enqueueTask(coda_task, -1);
     }
 
+    //attendo la terminazione dei thread worker
     for(int i = 0; i < newConfigFile->numWorker; i++){
         CHECK_FUNCTION("pthread_join workers", pthread_join(id_pool[i], NULL), !=, 0);
     }
+    //libero la memoria dell'array contenente i pthread_t dei thread worker
     free(id_pool);
-
 
     //libero la memoria del messaggio mandato:
     free(welcome_msg->data);
@@ -1152,12 +1168,12 @@ int main(int argc, char *argv[]){
     //copio le statistiche del server nel file di log.
     fprintf(file_log, "\n");
     saveProgramStatusOnLogFile(file_log, currentStatus, newConfigFile->numWorker, 1);
+    
+    //libero la memoria e chiudo gli stream aperti:
     fclose(file_log);
     free(currentStatus.workerRequests);
-
     close(comunicationPipe[0]);
     close(comunicationPipe[1]);
-    
     unlink(newConfigFile->socketName);
     icl_hash_destroy(hash_table, NULL, NULL);
     destroyQueue(coda_file);

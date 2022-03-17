@@ -33,6 +33,8 @@ $(OBJECT_DIRECTORY)/%.o: %.c $(HEADERS_DIRECTORY)/%.h
 
 clean:
 	rm -f $(OBJECT_DIRECTORY)/*.o
+	rm -r -f $(OBJECT_DIRECTORY)
+	mkdir $(OBJECT_DIRECTORY)
 	rm -f *.sk
 	rm -f server
 	rm -f client
