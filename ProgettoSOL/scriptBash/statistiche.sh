@@ -27,7 +27,7 @@ echo "Parsing del file di log ed estrazione statistiche:"
 
 # read e size media:
 echo -e -n "Numero di read: "
-grep "READ_FILE" $1 | wc -l
+grep "'READ_FILE'" $1 | wc -l
 echo -e -n "Numero di file letti con read_n: "
 grep "'READ_N_FILE':" $1 | wc -l
 echo -e -n "Numero di byte medi letti: "
@@ -35,15 +35,15 @@ grep "byte letti" $1 | cut -d: -f 2 | cut -d" " -f 2 | awk '{SOMMA += $1; NUMFIL
 
 # write e size media:
 echo -e -n "Numero di write: "
-grep "WRITE_FILE" $1 | wc -l
+grep "'WRITE_FILE'" $1 | wc -l
 echo -e -n "Numero di append: "
-grep "APPEND_TO_FILE" $1 | wc -l
+grep "'APPEND_TO_FILE'" $1 | wc -l
 echo -e -n "Numero di byte medi scritti: "
 grep "byte scritti" $1 | cut -d: -f 2 | cut -d" " -f 2 | awk '{SOMMA += $1; NUMFILE += 1} END {if(NUMFILE > 0){print int(SOMMA/NUMFILE) " bytes"}else{print "0 bytes"}}'
 
 # lock:
 echo -e -n "Numero di lock: "
-grep "LOCK_FILE" $1 | wc -l
+grep "'LOCK_FILE'" $1 | wc -l
 
 # open-lock:
 echo -e -n "Numero di open-lock: "
@@ -51,11 +51,11 @@ grep "O_LOCK" $1 | wc -l
 
 # unlock:
 echo -e -n "Numero di unlock: "
-grep "UNLOCK_FILE" $1 | wc -l
+grep "'UNLOCK_FILE'" $1 | wc -l
 
 # close:
 echo -e -n "Numero di close: "
-grep "CLOSE_FILE" $1 | wc -l
+grep "'CLOSE_FILE'" $1 | wc -l
 
 # max Mbytes reached:
 grep "Dimensione massima di Mbytes" $1

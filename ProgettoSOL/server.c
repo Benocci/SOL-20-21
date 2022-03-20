@@ -597,7 +597,7 @@ void *worker(void *args){
 
                 //aggiorno le statistiche del server:
                 LOCK("mtx_status", mtx_status);
-                if(currentStatus.num_max_file_reached < currentStatus.num_current_file_saved){
+                if(currentStatus.num_max_file_reached <= currentStatus.num_current_file_saved && currentStatus.num_current_file_saved <= newConfigFile->numFile){
                     currentStatus.num_max_file_reached = currentStatus.num_current_file_saved;
                 }
                 currentStatus.num_file_writed++;
@@ -936,7 +936,7 @@ void *worker(void *args){
 
         if(strcmp(to_send->response_code, "ok") == 0){
             LOCK("mtx_file_log", mtx_file_log);
-            fprintf(file_log, "Operazione di tipo '%s' del client %d svolta correttamente.\n", convertOptCodeInChar(to_receive->opt_code), socket_con);
+            fprintf(file_log, "Operazione di tipo %s del client %d svolta correttamente.\n", convertOptCodeInChar(to_receive->opt_code), socket_con);
             UNLOCK("mtx_file_log", mtx_file_log);
         }
 
