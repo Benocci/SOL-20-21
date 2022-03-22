@@ -37,11 +37,7 @@ void enqueue(QueueFile *q, void *elem){
         q->tail = new;
     }
     else{//altrimenti
-        nodoFile *tmp = q->head;
-
-        while (tmp->next != NULL){//scorro finchè non arrivo all'ultimo elemento
-            tmp = tmp->next;
-        }
+        nodoFile *tmp = q->tail;
         tmp->next = new;//metto in coda il nuovo elemento
         q->tail = new;  //imposto come nuova coda il nuovo elemento
         

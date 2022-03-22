@@ -25,11 +25,7 @@ int pushOpt(optList *list, int type_op, char *args){
         list->tail = new;
     }
     else{//altrimenti inserisco in coda:
-        opt *tmp = list->head;//prendo un riferimento alla testa
-
-        while(tmp->next != NULL){//scorro finchè non arrivo ad avere un elemento con il successivo NULL
-            tmp = tmp->next;
-        }
+        opt *tmp = list->tail;
         tmp->next = new;//appendo il nuovo elemento all'ultimo elemento trovato
         list->tail = new;//il nuovo elemento diventa la coda della lista
     }
