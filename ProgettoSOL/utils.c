@@ -175,12 +175,7 @@ int receiveMsg(Msg *to_receive, long fd){
 void printINFOMsg(Msg *to_print){//funzione utile al debugging
     printf("INFO MESSAGGIO di tipo %s(%d):\n",convertOptCodeInChar(to_print->opt_code), to_print->opt_code);
 
-    if(to_print->path == NULL){
-        printf("\tnessun path definito\n");
-    }
-    else{
-        printf("\tPath = '%s' lungo '%ld'\n", to_print->path, strlen(to_print->path));
-    }
+    printf("\tPath = '%s' lungo '%ld'\n", to_print->path, strlen(to_print->path));
 
     if(to_print->data_length <= 0){
         printf("\tnessun data definito\n");

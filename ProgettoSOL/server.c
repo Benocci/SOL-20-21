@@ -122,7 +122,7 @@ void *worker(void *args){
 
         //ricevo il messaggio dal client:
         if(receiveMsg(to_receive, socket_con) == -1){
-            fprintf(stderr, "ERRORE: recieveMsg.\n");
+            fprintf(stderr, "ERRORE: receiveMsg.\n");
             return (void *)-1;
         }
         
